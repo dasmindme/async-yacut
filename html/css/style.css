@@ -120,3 +120,18 @@ a.regular-link:hover {
 footer a.regular-link {
     font-weight: 200;
 }
+
+.logo-title {
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.logo-title .ya {
+  color: #d0021b; /* красный как в примерах */
+}
+
+.logo-title .cut {
+  color: #13629E; /* твой основной синий */
+}

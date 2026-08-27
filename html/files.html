@@ -5,14 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="/img/fav/favicon.ico" type="image">
   <link rel="apple-touch-icon" sizes="180x180" href="/img/fav/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/img/fav/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/img/fav/favicon-16x16.png">
-
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/style.css">
-  <title>YaCut - укоротитель ссылок</title>
+  <title>YaCut - загрузка файлов</title>
 </head>
 
 <body>
@@ -27,13 +26,14 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="nav nav-pills">
             <li class="nav-item">
-              <a class="nav-link active" href="{{ url_for('main.index') }}">Главная</a>
+              <a class="nav-link" href="{{ url_for('main.index') }}">Главная</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('main.files') }}">Загрузка файлов</a>
+              <a class="nav-link active" href="{{ url_for('main.files') }}">Загрузка файлов</a>
             </li>
           </ul>
         </div>
+
       </div>
     </nav>
   </header>
@@ -42,48 +42,21 @@
     <section class="container my-5 px-4">
       <h1 class="text-center"><span style="color:red">Ya</span>Cut</h1>
       <p class="text-center my-4">
-        Создайте короткую ссылку автоматически или предложите свой вариант
+        Загрузите файлы и получите на них короткие ссылки
       </p>
-
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <div class="container">
-            <div class="row my-3">
-              <div class="col-sm"></div>
-              <div class="col-sm">
-                <div class="alert alert-danger" role="alert">
-                  {% for message in messages %}
-                    <div>{{ message }}</div>
-                  {% endfor %}
-                </div>
-              </div>
-              <div class="col-sm"></div>
-            </div>
-          </div>
-        {% endif %}
-      {% endwith %}
 
       <div class="container">
         <div class="row my-3">
           <div class="col-sm"></div>
 
           <div class="col-sm">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
               {{ form.csrf_token }}
 
               <div>
                 <div>
-                  {{ form.original_link(class="form-control form-control-lg py-2 mb-3",
-                                        placeholder="Длинная ссылка") }}
-                  {% for e in form.original_link.errors %}
-                    <p><span style="color:red">{{ e }}</span></p>
-                  {% endfor %}
-                </div>
-
-                <div>
-                  {{ form.custom_id(class="form-control form-control-lg py-2 mb-3",
-                                    placeholder="Ваш вариант короткой ссылки") }}
-                  {% for e in form.custom_id.errors %}
+                  {{ form.files(class="form-control form-control-lg py-2 mb-3") }}
+                  {% for e in form.files.errors %}
                     <p><span style="color:red">{{ e }}</span></p>
                   {% endfor %}
                 </div>
@@ -97,16 +70,26 @@
         </div>
       </div>
 
-      {% if short_link %}
-        <div class="container">
+      {% if results %}
+        <div class="container mt-4">
           <div class="row">
             <div class="col-sm"></div>
-            <div class="col-sm text-center">
-              <h5 class="text-center">Короткая ссылка</h5>
-              <p class="text-center">
-                <a href="{{ short_link }}">{{ short_link }}</a>
-              </p>
+
+            <div class="col-sm">
+              <table class="table table-sm">
+                <tbody>
+                  {% for item in results %}
+                    <tr>
+                      <td>{{ item["filename"] }}</td>
+                      <td class="text-end">
+                        <a href="{{ item["short_link"] }}">{{ item["short_link"] }}</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
+
             <div class="col-sm"></div>
           </div>
         </div>
@@ -123,6 +106,6 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
   integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity="sha384-JZR6Spejh4U02d8jOtjVLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </html>

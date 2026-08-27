@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}YaCut{% endblock %}</title>
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/img/fav/favicon.ico" type="image">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/fav/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/fav/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/fav/favicon-16x16.png">
+</head>
+
+<body class="bg-light">
+  <div class="container">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}"
+               href="{{ url_for('main.index') }}">Главная</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path.startswith('/files') %}active{% endif %}"
+               href="{{ url_for('main.files') }}">Загрузка файлов</a>
+          </li>
+        </ul>
+      </div>
+
+      <main class="card-body">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-danger" role="alert">
+              {% for message in messages %}
+                <div>{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </main>
+
+      <footer class="card-footer bg-white text-center text-muted">
+        Укоротитель ссылок YaCut
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
