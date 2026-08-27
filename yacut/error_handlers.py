@@ -1,7 +1,5 @@
 from flask import jsonify, render_template, request
 
-from .api_views import api_bp
-
 
 def wants_json_response() -> bool:
     if request.path.startswith("/api/"):

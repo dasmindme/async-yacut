@@ -43,7 +43,8 @@ def create_id():
             return error("Указано недопустимое имя для короткой ссылки", 400)
 
         if URLMap.query.filter_by(short=custom_id).first():
-            return error("Предложенный вариант короткой ссылки уже существует.", 400)
+            return error(
+                "Предложенный вариант короткой ссылки уже существует.", 400)
 
         short_id = custom_id
     else:
@@ -53,15 +54,8 @@ def create_id():
     db.session.add(url_map)
     db.session.commit()
 
-    return (
-        jsonify(
-            {
-                "url": original,
-                "short_link": url_for("main.redirect_view", short_id=short_id, _external=True),
-            }
-        ),
-        201,
-    )
+    return (jsonify({"url": original, "short_link": url_for(
+        "main.redirect_view", short_id=short_id, _external=True), }), 201, )
 
 
 @api_bp.get("/id/<string:short_id>")

@@ -21,7 +21,10 @@ class URLMapForm(FlaskForm):
         validators=[
             Optional(),
             Length(max=16, message="Длина не должна превышать 16 символов"),
-            Regexp(CUSTOM_ID_RE, message="Допустимы только латинские буквы и цифры"),
+            Regexp(
+                CUSTOM_ID_RE,
+                message="Допустимы только латинские буквы и цифры",
+            ),
         ],
     )
 

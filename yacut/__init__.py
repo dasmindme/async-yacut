@@ -4,6 +4,7 @@ from .config import Config
 from .extensions import db, migrate
 from flask import render_template
 
+
 def create_app():
     app = Flask(
         __name__,
@@ -23,7 +24,7 @@ def create_app():
 
     from .api_views import api_bp
     app.register_blueprint(api_bp)
-    
+
     @app.errorhandler(404)
     def page_not_found(error):
         return render_template("404.html"), 404
@@ -33,5 +34,6 @@ def create_app():
         return render_template("500.html"), 500
 
     return app
+
 
 app = create_app()
