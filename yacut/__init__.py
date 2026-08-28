@@ -25,6 +25,9 @@ def create_app():
     from .api_views import api_bp
     app.register_blueprint(api_bp)
 
+    from .error_handlers import register_error_handlers
+    register_error_handlers(app)
+
     @app.errorhandler(404)
     def page_not_found(error):
         return render_template("404.html"), 404

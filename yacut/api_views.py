@@ -6,6 +6,9 @@ from .extensions import db
 from .models import URLMap
 from .utils import get_unique_short_id
 
+from http import HTTPStatus
+from .exceptions import InvalidAPIUsage
+
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 api_bp.strict_slashes = False
 
@@ -23,10 +26,16 @@ def create_id():
     data = request.get_json(silent=True)
 
     if data is None:
-        return error("Отсутствует тело запроса", 400)
+        raise InvalidAPIUsage(
+            "Отсутствует тело запроса",
+            HTTPStatus.BAD_REQUEST,
+        )
 
     if "url" not in data:
-        return error('"url" является обязательным полем!', 400)
+        raise InvalidAPIUsage(
+            '"url" является обязательным полем!',
+            HTTPStatus.BAD_REQUEST,
+        )
 
     original = data.get("url")
     custom_id = data.get("custom_id")

@@ -1,5 +1,7 @@
 from flask import jsonify, render_template, request
 
+from .exceptions import InvalidAPIUsage
+
 
 def wants_json_response() -> bool:
     if request.path.startswith("/api/"):
@@ -9,6 +11,10 @@ def wants_json_response() -> bool:
 
 
 def register_error_handlers(app):
+    @app.errorhandler(InvalidAPIUsage)
+    def handle_invalid_api_usage(error):
+        return jsonify({"message": error.message}), error.status_code
+
     @app.errorhandler(404)
     def page_not_found(error):
         if wants_json_response():
@@ -20,10 +26,3 @@ def register_error_handlers(app):
         if wants_json_response():
             return jsonify({"message": "Внутренняя ошибка сервера"}), 500
         return render_template("500.html"), 500
-
-    # Ошибки валидации/плохих запросов для API можно отдавать как 400
-    @app.errorhandler(400)
-    def bad_request(error):
-        if wants_json_response():
-            return jsonify({"message": "Отсутствует тело запроса"}), 400
-        return render_template("500.html"), 400

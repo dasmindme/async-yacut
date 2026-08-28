@@ -1,16 +1,21 @@
 import asyncio
+
 import aiohttp
-from flask import current_app
-
-from .yadisk import get_upload_link, upload, get_download_link
-
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 
 from .extensions import db
 from .forms import FileUploadForm, URLMapForm
 from .models import URLMap
 from .utils import get_unique_short_id
-from .yadisk import ensure_dir
+from .yadisk import ensure_dir, get_download_link, get_upload_link, upload
 
 bp = Blueprint("main", __name__)
 
